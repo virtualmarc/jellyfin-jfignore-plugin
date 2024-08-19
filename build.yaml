@@ -1,16 +1,16 @@
 ---
-name: "Template"
-guid: "eb5d7894-8eef-4b36-aa6f-5d124e828ce1"
+name: ".jfignore"
+guid: "A6363EF3-AEB3-4BC1-8408-243AAE4C1B8B"
 version: "1.0.0.0"
 targetAbi: "10.8.0.0"
-framework: "net6.0"
-overview: "Short description about your plugin"
+framework: "net8.0"
+overview: "Ignore files and folders by .jfignore Files"
 description: >
-  This is a longer description that can span more than one
-  line and include details about your plugin.
+  Ignore specific files and folders by placing .jfignore files inside your library folder.
+  The file can be at the root level or inside a sub directory.
 category: "General"
-owner: "jellyfin"
+owner: "virtualmarc"
 artifacts:
-- "Jellyfin.Plugin.Template.dll"
+- "Jellyfin.Plugin.JFIgnore.dll"
 changelog: >
-  changelog
+  1.0.0.0: Initial release
