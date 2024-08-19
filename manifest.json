@@ -1,0 +1,20 @@
+[
+    {
+        "guid": "A6363EF3-AEB3-4BC1-8408-243AAE4C1B8B",
+        "name": ".jfignore",
+        "description": "Ignore specific files and folders by placing .jfignore files inside your library folder.\nThe file can be at the root level or inside a sub directory.\n",
+        "overview": "Ignore files and folders by .jfignore Files",
+        "owner": "virtualmarc",
+        "category": "General",
+        "versions": [
+            {
+                "version": "1.0.0.0",
+                "changelog": "Initial release",
+                "targetAbi": "10.9.9.0",
+                "sourceUrl": "https://github.com/virtualmarc/jellyfin-jfignore-plugin/releases/download/1.0.0.0/JFIgnore_1.0.0.0.zip",
+                "checksum": "8787d469ef65052501a4351454b22347",
+                "timestamp": "2024-08-19T20:50:00Z"
+            }
+        ]
+    }
+]
