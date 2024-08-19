@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,16 +41,23 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
 
             if (File.Exists(ignorePath))
             {
-                Ignore.Ignore ignore = new Ignore.Ignore();
-                File.ReadLines(ignorePath).Where(line => line.Trim().Length > 0).ToList().ForEach(line => ignore.Add(line));
-
-                string relativePath = Path.GetRelativePath(parentDirectory.Path, fileInfo.FullName);
-
-                if (ignore.IsIgnored(relativePath))
+                try
                 {
-                    _logger.LogInformation("Media File {FileName} has been ignored by {IgnoreFile}", fileInfo.FullName, ignorePath);
+                    Ignore.Ignore ignore = new Ignore.Ignore();
+                    File.ReadLines(ignorePath).Where(line => line.Trim().Length > 0).ToList().ForEach(line => ignore.Add(line));
 
-                    return true;
+                    string relativePath = Path.GetRelativePath(parentDirectory.Path, fileInfo.FullName);
+
+                    if (ignore.IsIgnored(relativePath))
+                    {
+                        _logger.LogInformation("Media File {FileName} has been ignored by {IgnoreFile}", fileInfo.FullName, ignorePath);
+
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogCritical(ex, "Error handling Ignore File {IgnoreFile} on {FileName}", ignorePath, fileInfo.FullName);
                 }
             }
 
