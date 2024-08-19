@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.JavaScript;
 using Jellyfin.Plugin.JFIgnore.Configuration;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Resolvers;
@@ -16,6 +15,8 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
 {
     private readonly ILogger<JFIgnoreFileRule> _logger;
 
+    private static readonly Dictionary<string, IgnoreCache> _ignoreCaches = new();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="JFIgnoreFileRule"/> class.
     /// </summary>
@@ -23,6 +24,21 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
     public JFIgnoreFileRule(ILogger<JFIgnoreFileRule> logger)
     {
         _logger = logger;
+    }
+
+    private Ignore.Ignore? LoadIgnore(string ignorePath)
+    {
+        if (!_ignoreCaches.TryGetValue(ignorePath, out var value) ||
+            File.GetLastWriteTime(ignorePath) > value.LastModified)
+        {
+            Ignore.Ignore ignore = new Ignore.Ignore();
+            File.ReadLines(ignorePath).Where(line => line.Trim().Length > 0).ToList().ForEach(line => ignore.Add(line));
+
+            _ignoreCaches.Remove(ignorePath);
+            _ignoreCaches.Add(ignorePath, new IgnoreCache(File.GetLastWriteTime(ignorePath), ignore));
+        }
+
+        return value?.Ignore;
     }
 
     /// <inheritdoc />
@@ -43,8 +59,11 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
             {
                 try
                 {
-                    Ignore.Ignore ignore = new Ignore.Ignore();
-                    File.ReadLines(ignorePath).Where(line => line.Trim().Length > 0).ToList().ForEach(line => ignore.Add(line));
+                    Ignore.Ignore? ignore = LoadIgnore(ignorePath);
+                    if (ignore == null)
+                    {
+                        continue;
+                    }
 
                     string relativePath = Path.GetRelativePath(parentDirectory.Path, fileInfo.FullName);
 
@@ -66,5 +85,12 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
         while (!parentDirectory.IsTopParent);
 
         return false;
+    }
+
+    private class IgnoreCache(DateTime lastModified, Ignore.Ignore ignore)
+    {
+        public DateTime LastModified { get; init; } = lastModified;
+
+        public Ignore.Ignore Ignore { get; init; } = ignore;
     }
 }
