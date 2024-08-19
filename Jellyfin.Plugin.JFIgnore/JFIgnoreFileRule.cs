@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.JavaScript;
 using Jellyfin.Plugin.JFIgnore.Configuration;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Resolvers;

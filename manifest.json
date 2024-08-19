@@ -12,7 +12,7 @@
                 "changelog": "Initial release",
                 "targetAbi": "10.9.9.0",
                 "sourceUrl": "https://github.com/virtualmarc/jellyfin-jfignore-plugin/releases/download/1.0.0.0/JFIgnore_1.0.0.0.zip",
-                "checksum": "8787d469ef65052501a4351454b22347",
+                "checksum": "57b836ed928e6d1e2d95e1d1ea24388b",
                 "timestamp": "2024-08-19T20:50:00Z"
             }
         ]
