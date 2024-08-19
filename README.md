@@ -11,7 +11,7 @@ Go the the Jellyfin plugin page (in the admin section).
 Add a new repository (in the repository section).
 
 ```
-Coming soon
+https://raw.githubusercontent.com/virtualmarc/jellyfin-jfignore-plugin/master/manifest.json
 ```
 
 Select ".jfignore" and install (in the Catalog section).
