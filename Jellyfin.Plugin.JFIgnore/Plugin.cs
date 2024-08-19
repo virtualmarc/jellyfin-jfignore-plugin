@@ -23,6 +23,7 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         : base(applicationPaths, xmlSerializer)
     {
         Instance = this;
+        this.ConfigurationChanged = this.ConfigurationChangedEventHandler;
     }
 
     /// <inheritdoc />
@@ -35,6 +36,16 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     /// Gets the current plugin instance.
     /// </summary>
     public static Plugin? Instance { get; private set; }
+
+    /// <summary>
+    /// The configuration has been changed Event.
+    /// </summary>
+    /// <param name="sender">Event sender.</param>
+    /// <param name="c">Configuration.</param>
+    private void ConfigurationChangedEventHandler(object? sender, BasePluginConfiguration c)
+    {
+        JFIgnoreFileRule.ClearIgnoreCache();
+    }
 
     /// <inheritdoc />
     public IEnumerable<PluginPageInfo> GetPages()

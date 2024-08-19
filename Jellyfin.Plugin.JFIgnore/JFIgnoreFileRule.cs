@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Runtime.InteropServices.JavaScript;
 using Jellyfin.Plugin.JFIgnore.Configuration;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Resolvers;
@@ -11,6 +13,8 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
 {
     private readonly ILogger<JFIgnoreFileRule> _logger;
 
+    private static Dictionary<string, Ignore.Ignore> _ignoreCache = new();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="JFIgnoreFileRule"/> class.
     /// </summary>
@@ -18,6 +22,14 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
     public JFIgnoreFileRule(ILogger<JFIgnoreFileRule> logger)
     {
         _logger = logger;
+    }
+
+    /// <summary>
+    /// Clear the ignore cache.
+    /// </summary>
+    public static void ClearIgnoreCache()
+    {
+        _ignoreCache.Clear();
     }
 
     /// <inheritdoc />
