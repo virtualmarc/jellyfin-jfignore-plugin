@@ -8,12 +8,17 @@ namespace Jellyfin.Plugin.JFIgnore.Configuration;
 public class PluginConfiguration : BasePluginConfiguration
 {
     /// <summary>
+    /// Default Filename.
+    /// </summary>
+    public const string FILENAME = ".jfignore";
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="PluginConfiguration"/> class.
     /// </summary>
     public PluginConfiguration()
     {
         // set default options here
-        IgnoreFilename = ".jfignore";
+        IgnoreFilename = FILENAME;
     }
 
     /// <summary>
