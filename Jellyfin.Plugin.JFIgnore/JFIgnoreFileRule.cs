@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using Jellyfin.Plugin.JFIgnore.Configuration;
 using MediaBrowser.Controller.Entities;
@@ -13,8 +15,6 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
 {
     private readonly ILogger<JFIgnoreFileRule> _logger;
 
-    private static Dictionary<string, Ignore.Ignore> _ignoreCache = new();
-
     /// <summary>
     /// Initializes a new instance of the <see cref="JFIgnoreFileRule"/> class.
     /// </summary>
@@ -24,24 +24,38 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
         _logger = logger;
     }
 
-    /// <summary>
-    /// Clear the ignore cache.
-    /// </summary>
-    public static void ClearIgnoreCache()
-    {
-        _ignoreCache.Clear();
-    }
-
     /// <inheritdoc />
     public bool ShouldIgnore(FileSystemMetadata fileInfo, BaseItem? parent)
     {
         string ignoreFilename = Plugin.Instance?.Configuration.IgnoreFilename ?? PluginConfiguration.FILENAME;
-        if (ignoreFilename.Length == 0)
+        if (ignoreFilename.Length == 0 || parent == null)
         {
             return false;
         }
 
-        _logger.LogInformation("FileName: {FileName}, Extension: {FileExtension}, FullName: {FullName}, IsDirectory: {IsDirectory}, ParentName: {ParentName}, ParentPath: {ParentPath}, TopParentPath: {TopParentPath}", fileInfo.Name, fileInfo.Extension, fileInfo.FullName, fileInfo.IsDirectory, parent?.Name, parent?.Path, parent?.GetTopParent().Path);
+        BaseItem parentDirectory = parent;
+        do
+        {
+            string ignorePath = Path.Combine(parentDirectory.Path, ignoreFilename);
+
+            if (File.Exists(ignorePath))
+            {
+                Ignore.Ignore ignore = new Ignore.Ignore();
+                File.ReadLines(ignorePath).Where(line => line.Trim().Length > 0).ToList().ForEach(line => ignore.Add(line));
+
+                string relativePath = Path.GetRelativePath(parentDirectory.Path, fileInfo.FullName);
+
+                if (ignore.IsIgnored(relativePath))
+                {
+                    _logger.LogInformation("Media File {FileName} has been ignored by {IgnoreFile}", fileInfo.FullName, ignorePath);
+
+                    return true;
+                }
+            }
+
+            parentDirectory = parentDirectory.GetParent();
+        }
+        while (!parentDirectory.IsTopParent);
 
         return false;
     }
