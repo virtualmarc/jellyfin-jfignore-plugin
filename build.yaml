@@ -1,7 +1,7 @@
 ---
 name: ".jfignore"
 guid: "A6363EF3-AEB3-4BC1-8408-243AAE4C1B8B"
-version: "1.0.0.0"
+version: "1.0.0.1"
 targetAbi: "10.9.9.0"
 framework: "net8.0"
 overview: "Ignore files and folders by .jfignore Files"
@@ -14,3 +14,4 @@ artifacts:
 - "Jellyfin.Plugin.JFIgnore.dll"
 changelog: >
   1.0.0.0: Initial release
+  1.0.0.1: Fixed NPE for new Series
