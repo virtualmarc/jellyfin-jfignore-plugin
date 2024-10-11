@@ -55,10 +55,14 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
             return false;
         }
 
+        _logger.LogDebug("Ignore Filename: {IgnoreFilename}", ignoreFilename);
+
         BaseItem parentDirectory = parent;
         do
         {
             string ignorePath = Path.Combine(parentDirectory.Path, ignoreFilename);
+
+            _logger.LogDebug("Check Ignore Path: {IgnorePath}", ignorePath);
 
             if (File.Exists(ignorePath))
             {
@@ -86,8 +90,10 @@ public class JFIgnoreFileRule : IResolverIgnoreRule
             }
 
             parentDirectory = parentDirectory.GetParent();
+
+            _logger.LogDebug("Parent Directory: {ParentDirectory}", parentDirectory);
         }
-        while (!parentDirectory.IsTopParent);
+        while (parentDirectory is { IsTopParent: false });
 
         return false;
     }
