@@ -14,6 +14,14 @@
                 "sourceUrl": "https://github.com/virtualmarc/jellyfin-jfignore-plugin/releases/download/1.0.0.0/JFIgnore_1.0.0.0.zip",
                 "checksum": "57b836ed928e6d1e2d95e1d1ea24388b",
                 "timestamp": "2024-08-19T20:50:00Z"
+            },
+            {
+                "version": "1.0.0.1",
+                "changelog": "Fixed NPE on new series",
+                "targetAbi": "10.9.9.0",
+                "sourceUrl": "https://github.com/virtualmarc/jellyfin-jfignore-plugin/releases/download/1.0.0.1/JFIgnore_1.0.0.1.zip",
+                "checksum": "e05e04750927c8fcc69ae0b237fe28c6",
+                "timestamp": "2024-10-11T21:37:00Z"
             }
         ]
     }
